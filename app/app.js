@@ -8,6 +8,7 @@ window.addEventListener("load", () => {
   let locationTimezone = document.querySelector(".location-timezone");
   let degreeSection = document.querySelector(".degree-section");
   let degreeSpan = document.querySelector(".degree-section span");
+  let modalWindow = document.querySelector('.modal');
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -19,10 +20,10 @@ window.addEventListener("load", () => {
       const api = `${proxy}api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=065ddd7deac84381473fec5c3f4b298e`;
 
       fetch(api)
-        .then((response) => {
+        .then(response => {
           return response.json();
         })
-        .then((data) => {
+        .then(data => {
           
           const description = data.weather[0].description;
           const temperature = (data.main.temp - 273.15).toFixed(1);
@@ -47,9 +48,14 @@ window.addEventListener("load", () => {
               degreeSpan.textContent = "C";
               temperatureDegree.textContent = temperature;
             }
-          });
-        });
-    });
+          })
+        })
+        .catch(error => {
+          if(error) {
+            modalWindow.style.display = 'block'
+          }
+        })
+    })
   }
 
   function setIcons(icon, iconID) {
